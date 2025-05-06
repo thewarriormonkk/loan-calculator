@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import { useCurrencyContext } from '../context/CurrencyContext';
+import { useTheme } from '@mui/material/styles';
 
 interface EMITableProps {
   amortizationData: EMIDetails[];
@@ -61,25 +62,41 @@ const columns: ColumnData[] = [
   },
 ];
 
-const VirtuosoTableComponents: TableComponents<EMIDetails> = {
-  Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
-    <TableContainer component={Paper} {...props} ref={ref} />
-  )),
-  Table: (props) => (
-    <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />
-  ),
-  TableHead,
-  TableRow: ({ item: _item, ...props }) => <TableRow {...props} />,
-  TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
-    <TableBody {...props} ref={ref} />
-  )),
-};
-
 const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, onReset }) => {
   const { currency, setCurrency } = useCurrencyContext();
-
+  const theme = useTheme();
+  
   const handleCurrencyChange = (event: SelectChangeEvent) => {
     setCurrency(event.target.value);
+  };
+
+  const VirtuosoTableComponents: TableComponents<EMIDetails> = {
+    Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
+      <TableContainer component={Paper} {...props} ref={ref} sx={{ backgroundColor: theme.palette.background.paper }} />
+    )),
+    Table: (props) => (
+      <Table {...props} sx={{ 
+        borderCollapse: 'separate', 
+        tableLayout: 'fixed',
+        color: theme.palette.text.primary,
+      }} />
+    ),
+    TableHead,
+    TableRow: ({ item: _item, ...props }) => (
+      <TableRow 
+        {...props} 
+        sx={{ 
+          '&:hover': { 
+            backgroundColor: theme.palette.mode === 'light' 
+              ? 'rgba(0, 0, 0, 0.04)' 
+              : 'rgba(255, 255, 255, 0.08)'
+          } 
+        }} 
+      />
+    ),
+    TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
+      <TableBody {...props} ref={ref} />
+    )),
   };
 
   function fixedHeaderContent() {
@@ -92,8 +109,9 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
             align={column.numeric ? 'right' : 'left'}
             style={{ width: column.width }}
             sx={{
-              backgroundColor: 'background.paper',
+              backgroundColor: theme.palette.background.paper,
               fontWeight: 'bold',
+              color: theme.palette.text.primary,
             }}
           >
             {column.label}
@@ -110,6 +128,7 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
           <TableCell
             key={column.dataKey}
             align={column.numeric ? 'right' : 'left'}
+            sx={{ color: theme.palette.text.primary }}
           >
             {column.format && typeof row[column.dataKey] === 'number'
               ? column.format(row[column.dataKey] as number, currency)
@@ -122,7 +141,12 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
 
   return (
     <Box sx={{ width: '100%', mt: 4 }}>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography 
+        variant="h5" 
+        component="h2" 
+        gutterBottom
+        sx={{ color: theme.palette.text.primary }}
+      >
         Monthly EMI: {monthlyPayment.toFixed(2)} {currency}
       </Typography>
 
@@ -152,11 +176,19 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
         </Button>
       </Box>
 
-      <Typography variant="h6" component="h3" gutterBottom>
+      <Typography 
+        variant="h6" 
+        component="h3" 
+        gutterBottom
+        sx={{ color: theme.palette.text.primary }}
+      >
         Amortization Schedule ({currency})
       </Typography>
 
-      <Paper style={{ height: 400, width: '100%' }}>
+      <Paper 
+        style={{ height: 400, width: '100%' }}
+        sx={{ backgroundColor: theme.palette.background.paper }}
+      >
         <TableVirtuoso
           data={amortizationData}
           components={VirtuosoTableComponents}
