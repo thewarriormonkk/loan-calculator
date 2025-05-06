@@ -2,7 +2,7 @@
 
 ## 🔗 Live Demo
 
-[Loan Calculator App](https://loan-calculator-app-git-main-thewarriormonkks-projects.vercel.app/)
+[Loan Calculator App](https://loan-calculator-app-iota.vercel.app)
 
 ![Loan Calculator App Screenshot Placeholder](./public/screenshot.png)
 
