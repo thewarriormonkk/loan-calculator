@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// types for our data
 export interface CurrencyRate {
   currency: string;
   rate: number;
@@ -14,12 +13,6 @@ type UseFetchExchangeRatesResult = {
 };
 
 
-/**
- * Custom hook to fetch currency exchange rates with authorization
- * @param url - The API URL to fetch exchange rates
- * @param token - The authorization token
- * @returns {Object} - The data, loading state, and any error
- */
 export const useFetchExchangeRates = (url: string): UseFetchExchangeRatesResult  => {
   const [data, setData] = useState<CurrencyRate[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -29,15 +22,13 @@ export const useFetchExchangeRates = (url: string): UseFetchExchangeRatesResult 
     const fetchData = async () => {
       try {
         url = import.meta.env.VITE_API_URL;
-        console.log(url);
         setIsLoading(true);
         const response = await axios({
             method: "get",
             url,
         });
-        console.log("data", response.data.conversion_rates);
 
-        // Transform the data into the format we need
+        // transform the data into the format we need
         const currencyRates  = Object.entries(response.data.conversion_rates || {}).map(
           ([currency, rate]) => ({
             currency,

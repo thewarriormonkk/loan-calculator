@@ -38,7 +38,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const [mode, setMode] = useState<'light' | 'dark'>(getInitialMode);
 
-  // Create theme with enhanced colors for better dark mode
   const theme = React.useMemo(
     () =>
       createTheme({
@@ -46,7 +45,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
           mode,
           ...(mode === 'light'
             ? {
-                // Light mode customizations
+                // light mode customizations
                 primary: {
                   main: '#1976d2',
                 },
@@ -56,7 +55,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
                 },
               }
             : {
-                // Dark mode customizations
+                // dark mode customizations
                 primary: {
                   main: '#90caf9',
                 },
@@ -74,10 +73,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     [mode],
   );
 
-  // Save theme preference to localStorage when it changes
+  // save theme preference
   useEffect(() => {
     localStorage.setItem('theme-mode', mode);
-    // Update document body background color
     document.body.style.backgroundColor = mode === 'light' ? '#f5f5f5' : '#121212';
   }, [mode]);
 
@@ -88,7 +86,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, mode }}>
       <MuiThemeProvider theme={theme}>
-      <CssBaseline /> {/* This will apply global styles based on the theme */}
+      <CssBaseline />
         {children}
       </MuiThemeProvider>
     </ThemeContext.Provider>
