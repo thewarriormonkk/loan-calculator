@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Stack, Button } from "@mui/material";
 
 const Navbar = () => {
     return (
@@ -10,10 +10,18 @@ const Navbar = () => {
                         Loan Calculator App
                     </Typography>
                     <Stack direction="row" spacing={2}>
-                        <Button color="inherit">HOME</Button>
-                        <Button color="inherit">EXCHANGE RATES (LIVE)</Button>
-                        <Button color="inherit">ABOUT</Button>
-                        <Button color="inherit">ERROR PAGE</Button>
+                        <Link to="/">
+                            <Button color="inherit">HOME</Button>
+                        </Link>
+                        <Link to="/exchange_rates_live">
+                            <Button color="inherit">EXCHANGE RATES (LIVE)</Button>
+                        </Link>
+                        <Link to="/about">
+                            <Button color="inherit">ABOUT</Button>
+                        </Link>
+                        <Link to="/error_page">
+                            <Button color="inherit">ERROR PAGE</Button>
+                        </Link>
                     </Stack> 
                 </Toolbar>
             </AppBar>
