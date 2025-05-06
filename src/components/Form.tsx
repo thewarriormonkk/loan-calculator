@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Box, Button, TextField, useTheme } from "@mui/material";
-import type { FormData, NumericFormData } from "../types/type";
+import type { FormData, NumericFormData } from "../types/type.ts";
 
 interface FormProps {
   onCalculate: (data: NumericFormData) => void;

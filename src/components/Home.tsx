@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Box, Container, Typography, Paper } from "@mui/material";
 import Form from "./Form";
-import EMITable from "./EMITable";
+import EMITable from "./EMITable.tsx";
 import type { NumericFormData, EMIDetails, EMIResult } from "../types/type";
 
 export default function Home() {

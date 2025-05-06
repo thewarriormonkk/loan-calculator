@@ -15,7 +15,7 @@ import {
   useTheme,
   Container
 } from '@mui/material';
-import { useFetchExchangeRates, type CurrencyRate } from '../hooks/useFetchExchangeRates';
+import { useFetchExchangeRates, type CurrencyRate } from '../hooks/useFetchExchangeRates.ts';
 
 interface CurrencyExchangeTableProps {
   apiUrl: string;
