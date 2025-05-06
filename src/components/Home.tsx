@@ -1,40 +1,40 @@
 import * as React from "react";
 import { Box, Container, Typography, Paper } from "@mui/material";
 import Form from "./Form";
-import EMITable from "./EmiTable";
-import type { FormData, NumericFormData, EMIDetails, EMIResult } from "../types/type";
+import EMITable from "./EMITable";
+import type { NumericFormData, EMIDetails, EMIResult } from "../types/type";
 
 export default function Home() {
   const [emiResult, setEmiResult] = React.useState<EMIResult | null>(null);
 
-  // Calculate EMI based on form data
+  // calculate emi
   const calculateEMI = (formData: NumericFormData) => {
     const P = formData.loanAmount;
     const N = formData.term * 12;
     const R = formData.interestRate / 12 / 100; 
 
-    // Calculate monthly payment using the formula: EMI = [P × R × (1+R)^N] / [(1+R)^N – 1]
+    // monthly payment
     const monthlyPayment = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
     
-    // Calculate total payment and interest
+    // total payment and interest
     const totalPayment = monthlyPayment * N;
     const totalInterest = totalPayment - P;
 
-    // Generate amortization schedule
+    // amortization schedule
     const amortizationSchedule: EMIDetails[] = [];
     let remainingBalance: number = P;
 
     for (let month = 1; month <= N; month++) {
-      // Calculate interest for this month
+      // interest for this month
       const interest = remainingBalance * R;
       
-      // Calculate principal for this month
+      // principal for this month
       const principal = monthlyPayment - interest;
       
-      // Update remaining balance
+      // update remaining balance
       remainingBalance -= principal;
       
-      // Add to amortization schedule
+      // add to amortization schedule
       amortizationSchedule.push({
         month,
         principal,
@@ -51,7 +51,7 @@ export default function Home() {
     });
   };
 
-  // Reset EMI result
+  // reset emi result
   const resetEMI = () => {
     setEmiResult(null);
   };

@@ -7,15 +7,14 @@ import {
   Stack,
   Button,
   useMediaQuery,
-  useTheme,
   IconButton,
   Menu,
   MenuItem,
   Switch,
-  Box,
   styled
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useThemeContext } from "../context/ThemeContext";
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
@@ -36,9 +35,9 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const Navbar: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width:744px)");
   const location = useLocation();
+  const isMobile = useMediaQuery("(max-width:744px)");
+  const { toggleTheme, mode, theme } = useThemeContext(); // Get theme from context
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -56,7 +55,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.mode === 'light' ? '#1976d2' : theme.palette.primary.dark }}>
       <Toolbar>
         <Typography
           variant="h6"
@@ -94,7 +93,11 @@ const Navbar: React.FC = () => {
                 </MenuItem>
               ))}
               <MenuItem disableRipple>
-                <CustomSwitch defaultChecked size="small" />
+                <CustomSwitch
+                  checked={mode === 'dark'}
+                  onChange={toggleTheme}
+                  size="small"
+                />
               </MenuItem>
             </Menu>
           </>
@@ -118,7 +121,11 @@ const Navbar: React.FC = () => {
                 {item.label}
               </Button>
             ))}
-            <CustomSwitch defaultChecked size="small" />
+            <CustomSwitch
+              checked={mode === 'dark'}
+              onChange={toggleTheme}
+              size="small"
+            />
           </Stack>
         )}
       </Toolbar>

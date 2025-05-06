@@ -15,18 +15,25 @@ const Form: React.FC<FormProps> = ({ onCalculate }) => {
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    setFormData((prev) => {
-      return { ...prev, [name]: value };
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    const { loanAmount, interestRate, term } = formData;
+
+    if (!loanAmount || !interestRate || !term) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
     const numericData = {
-      loanAmount: parseFloat(formData.loanAmount),
-      interestRate: parseFloat(formData.interestRate),
-      term: parseFloat(formData.term)
+      loanAmount: parseFloat(loanAmount),
+      interestRate: parseFloat(interestRate),
+      term: parseFloat(term)
     };
+
     onCalculate(numericData);
   }
 
@@ -34,26 +41,36 @@ const Form: React.FC<FormProps> = ({ onCalculate }) => {
     <Box
       component="form"
       sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        gap: 2,
+        "& .MuiTextField-root": {
+          width: "200px"
+        },
+
+        "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button": {
+          WebkitAppearance: "none",
+          margin: 0
+        },
+        "& input[type=number]": {
+          MozAppearance: "textfield"
+        }
       }}
       noValidate
       autoComplete="off"
       onSubmit={handleSubmit}
     >
       <TextField
+        required
         label="Loan Amount"
         name="loanAmount"
         value={formData.loanAmount}
         onChange={handleChange}
         type="number"
-        InputProps={{
-          startAdornment: <span style={{ marginRight: '8px' }}></span>,
-        }}
       />
       <TextField
+        required
         label="Interest Rate (%)"
         name="interestRate"
         value={formData.interestRate}
@@ -62,6 +79,7 @@ const Form: React.FC<FormProps> = ({ onCalculate }) => {
         inputProps={{ step: "0.01" }}
       />
       <TextField
+        required
         label="Term (Years)"
         name="term"
         value={formData.term}
@@ -69,9 +87,9 @@ const Form: React.FC<FormProps> = ({ onCalculate }) => {
         type="number"
       />
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           type="submit"
           sx={{ width: '200px' }}
         >

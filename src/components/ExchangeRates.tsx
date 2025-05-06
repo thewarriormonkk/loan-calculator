@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from "axios";
 import {
   Paper,
   Table,
@@ -29,7 +28,7 @@ const CurrencyExchangeTable: React.FC<CurrencyExchangeTableProps> = () => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const { data, isLoading, error } = useFetchExchangeRates(apiUrl);
   
-  // For responsive design
+  // for responsive design
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -58,7 +57,7 @@ const CurrencyExchangeTable: React.FC<CurrencyExchangeTableProps> = () => {
     );
   }
 
-  // Calculate current page data
+  // calculate current page data
   const currentPageData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const totalRows = data.length;
 

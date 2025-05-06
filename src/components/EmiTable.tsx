@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { useCurrencyContext } from '../context/CurrencyContext';
 
 interface EMITableProps {
   amortizationData: EMIDetails[];
@@ -27,7 +28,7 @@ interface ColumnData {
   label: string;
   numeric?: boolean;
   width?: number;
-  format?: (value: number) => string;
+  format?: (value: number, currency: string) => string;
 }
 
 const columns: ColumnData[] = [
@@ -42,21 +43,21 @@ const columns: ColumnData[] = [
     label: 'Principal',
     dataKey: 'principal',
     numeric: true,
-    format: (value: number) => `${value.toFixed(2)} USD`,
+    format: (value: number, currency: string) => `${value.toFixed(2)} ${currency}`,
   },
   {
     width: 150,
     label: 'Interest',
     dataKey: 'interest',
     numeric: true,
-    format: (value: number) => `${value.toFixed(2)} USD`,
+    format: (value: number, currency: string) => `${value.toFixed(2)} ${currency}`,
   },
   {
     width: 200,
     label: 'Remaining Balance',
     dataKey: 'remainingBalance',
     numeric: true,
-    format: (value: number) => `${value.toFixed(2)} USD`,
+    format: (value: number, currency: string) => `${value.toFixed(2)} ${currency}`,
   },
 ];
 
@@ -75,7 +76,7 @@ const VirtuosoTableComponents: TableComponents<EMIDetails> = {
 };
 
 const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, onReset }) => {
-  const [currency, setCurrency] = React.useState('USD');
+  const { currency, setCurrency } = useCurrencyContext();
 
   const handleCurrencyChange = (event: SelectChangeEvent) => {
     setCurrency(event.target.value);
@@ -111,7 +112,7 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
             align={column.numeric ? 'right' : 'left'}
           >
             {column.format && typeof row[column.dataKey] === 'number'
-              ? column.format(row[column.dataKey] as number)
+              ? column.format(row[column.dataKey] as number, currency)
               : row[column.dataKey]}
           </TableCell>
         ))}
@@ -122,9 +123,9 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
   return (
     <Box sx={{ width: '100%', mt: 4 }}>
       <Typography variant="h5" component="h2" gutterBottom>
-        Monthly EMI: ${monthlyPayment.toFixed(2)}
+        Monthly EMI: {monthlyPayment.toFixed(2)} {currency}
       </Typography>
-      
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel id="currency-select-label">Currency</InputLabel>
@@ -140,10 +141,10 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
             <MenuItem value="GBP">GBP</MenuItem>
           </Select>
         </FormControl>
-        
-        <Button 
-          variant="outlined" 
-          color="secondary" 
+
+        <Button
+          variant="outlined"
+          color="secondary"
           onClick={onReset}
           sx={{ height: '40px' }}
         >
@@ -154,7 +155,7 @@ const EMITable: React.FC<EMITableProps> = ({ amortizationData, monthlyPayment, o
       <Typography variant="h6" component="h3" gutterBottom>
         Amortization Schedule ({currency})
       </Typography>
-      
+
       <Paper style={{ height: 400, width: '100%' }}>
         <TableVirtuoso
           data={amortizationData}
