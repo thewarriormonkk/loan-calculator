@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Box, useTheme } from "@mui/material";
-// components
+
 import About from "./components/About";
 import Error from "./components/Error";
 import ExchangeRates from "./components/ExchangeRates";
